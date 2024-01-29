@@ -18,5 +18,5 @@ public class Product extends BaseModel{
     private String image;
     @OneToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     private Price price;
-
+    private int inventorycount;
 }
