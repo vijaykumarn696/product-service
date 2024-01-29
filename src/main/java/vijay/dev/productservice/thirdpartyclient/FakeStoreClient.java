@@ -31,7 +31,7 @@ public class FakeStoreClient  {
     }
 
 
-    public FakeStoreProductDto getProductById(Long id) throws NotFoundException {
+    public FakeStoreProductDto getProductById(String id) throws NotFoundException {
         RestTemplate restTemplate=restTemplateBuilder.build();
         ResponseEntity<FakeStoreProductDto> response= restTemplate.getForEntity(fakeStoreWebUrl+fakeStoreProductUrl+"/{id}",FakeStoreProductDto.class,id);
         FakeStoreProductDto fakeStoreProductDto=response.getBody();
@@ -60,7 +60,7 @@ public class FakeStoreClient  {
     }
 
 
-    public FakeStoreProductDto updateProductUsingPUT(Long id, FakeStoreProductDto product) {
+    public FakeStoreProductDto updateProductUsingPUT(String id, FakeStoreProductDto product) {
         RestTemplate restTemplate=restTemplateBuilder.build();
         HttpEntity<FakeStoreProductDto> httpEntity=new HttpEntity<>(product);
         ResponseEntity<FakeStoreProductDto> response= restTemplate.exchange(fakeStoreWebUrl+fakeStoreProductUrl+"/{id}", HttpMethod.PUT,httpEntity,FakeStoreProductDto.class,id);
@@ -68,7 +68,7 @@ public class FakeStoreClient  {
         return fakeStoreProductDto;
     }
 
-    public FakeStoreProductDto updateProductUsingPATCH(Long id, FakeStoreProductDto product) {
+    public FakeStoreProductDto updateProductUsingPATCH(String id, FakeStoreProductDto product) {
         RestTemplate restTemplate=restTemplateBuilder.build();
         HttpEntity<FakeStoreProductDto> httpEntity=new HttpEntity<>(product);
         ResponseEntity<FakeStoreProductDto> response= restTemplate.exchange(fakeStoreWebUrl+fakeStoreProductUrl+"/{id}",
@@ -78,7 +78,7 @@ public class FakeStoreClient  {
     }
 
 
-    public FakeStoreProductDto deleteProduct(Long id) {
+    public FakeStoreProductDto deleteProduct(String id) {
         RestTemplate restTemplate=restTemplateBuilder.build();
         ResponseEntity<FakeStoreProductDto> response= restTemplate.exchange(fakeStoreWebUrl+fakeStoreProductUrl+"/{id}", HttpMethod.DELETE,null,FakeStoreProductDto.class,id);
         FakeStoreProductDto fakeStoreProductDto=response.getBody();

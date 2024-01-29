@@ -1,23 +1,19 @@
 package vijay.dev.productservice.services;
 
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import vijay.dev.productservice.dtos.FakeStoreProductDto;
 import vijay.dev.productservice.dtos.GenericProductDto;
+import vijay.dev.productservice.models.Product;
 import vijay.dev.productservice.exceptions.NotFoundException;
+import vijay.dev.productservice.repositories.ProductRepository;
 import vijay.dev.productservice.thirdpartyclient.FakeStoreClient;
 
 import java.util.ArrayList;
 import java.util.List;
-@Service
-@Primary
+@Service("fakeStoreProductService")
+//@Primary
 public class FakeStoreProductService implements ProductService{
 
 //    @Value("${fakestore.product.url}")
@@ -33,9 +29,11 @@ public class FakeStoreProductService implements ProductService{
 //    }
 
     private FakeStoreClient fakeStoreClient;
-    public FakeStoreProductService(FakeStoreClient fakeStoreClient)
+    private ProductRepository productRepository;
+    public FakeStoreProductService(FakeStoreClient fakeStoreClient,ProductRepository productRepository)
     {
         this.fakeStoreClient=fakeStoreClient;
+        this.productRepository=productRepository;
     }
     private  GenericProductDto convertFakeStoreProductDtoToGenericProductDto(FakeStoreProductDto fakeStoreProductDto)
     {
@@ -61,7 +59,7 @@ public class FakeStoreProductService implements ProductService{
         return fakeStoreProductDto;
     }
     @Override
-    public GenericProductDto getProductById(Long id) throws NotFoundException {
+    public GenericProductDto getProductById(String id) throws NotFoundException {
         FakeStoreProductDto fakeStoreProductDto=fakeStoreClient.getProductById(id);
         if(fakeStoreProductDto==null)
         {
@@ -78,6 +76,24 @@ public class FakeStoreProductService implements ProductService{
         GenericProductDto genericProductDto = convertFakeStoreProductDtoToGenericProductDto(fakeStoreProductDtoRes);
         return genericProductDto;
     }
+    @Override
+    public GenericProductDto createProductUsingHibernate(Product product) {
+
+       Product p= productRepository.save(product);
+       GenericProductDto genericProductDto=new GenericProductDto();
+       genericProductDto.setId(p.getId());
+       genericProductDto.setDescription(p.getDescription());
+       genericProductDto.setPrice(p.getPrice());
+       genericProductDto.setImage(p.getImage());
+       genericProductDto.setTitle(p.getTitle());
+       return genericProductDto;
+
+//        FakeStoreProductDto fakeStoreProductDto=convertGenericProductDtoToFakeStoreProductDto(product);
+//        FakeStoreProductDto fakeStoreProductDtoRes= fakeStoreClient.createProduct(fakeStoreProductDto);
+//        GenericProductDto genericProductDto = convertFakeStoreProductDtoToGenericProductDto(fakeStoreProductDtoRes);
+//        return genericProductDto;
+    }
+
 
     @Override
     public List<GenericProductDto> getAllProducts() {
@@ -91,7 +107,7 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public GenericProductDto updateProductUsingPUT(Long id, GenericProductDto product) {
+    public GenericProductDto updateProductUsingPUT(String id, GenericProductDto product) {
         FakeStoreProductDto fakeStoreProductDto=convertGenericProductDtoToFakeStoreProductDto(product);
         FakeStoreProductDto fakeStoreProductDtoRes=fakeStoreClient.updateProductUsingPUT(id,fakeStoreProductDto);
         GenericProductDto genericProductDto = convertFakeStoreProductDtoToGenericProductDto(fakeStoreProductDtoRes);
@@ -99,7 +115,7 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public GenericProductDto updateProductUsingPATCH(Long id, GenericProductDto product) {
+    public GenericProductDto updateProductUsingPATCH(String id, GenericProductDto product) {
         FakeStoreProductDto fakeStoreProductDto=convertGenericProductDtoToFakeStoreProductDto(product);
         FakeStoreProductDto fakeStoreProductDtoRes=fakeStoreClient.updateProductUsingPATCH(id,fakeStoreProductDto);
         GenericProductDto genericProductDto = convertFakeStoreProductDtoToGenericProductDto(fakeStoreProductDtoRes);
@@ -107,7 +123,7 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public GenericProductDto deleteProduct(Long id) {
+    public GenericProductDto deleteProduct(String id) {
         FakeStoreProductDto fakeStoreProductDto=fakeStoreClient.deleteProduct(id);
         GenericProductDto genericProductDto = convertFakeStoreProductDtoToGenericProductDto(fakeStoreProductDto);
         return genericProductDto;
