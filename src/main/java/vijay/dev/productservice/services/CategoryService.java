@@ -1,5 +1,6 @@
 package vijay.dev.productservice.services;
 
+import vijay.dev.productservice.dtos.UUIDsDto;
 import vijay.dev.productservice.models.Category;
 
 import java.util.List;
@@ -15,5 +16,7 @@ public interface CategoryService {
     Category deleteCategory(String id);
 
     Category updateCategoryUsingPatch(Category category);
+
+    List<Category> getCategoriesByIds(UUIDsDto uuids);
 
 }

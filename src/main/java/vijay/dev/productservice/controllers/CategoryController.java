@@ -2,6 +2,7 @@ package vijay.dev.productservice.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import vijay.dev.productservice.dtos.UUIDsDto;
 import vijay.dev.productservice.models.Category;
 import vijay.dev.productservice.services.SelfProductServiceImpl;
 
@@ -41,6 +42,11 @@ public class CategoryController {
     public Category updateCategoryUsingPut(@RequestBody Category category)
     {
         return selfProductService.updateCategoryUsingPut(category);
+    }
+    @GetMapping("/uuids")
+    public List<Category> getCategoriesByUsingUuids(@RequestBody UUIDsDto uuids)
+    {
+        return  selfProductService.getCategoriesByIds(uuids);
     }
 
     @PatchMapping()

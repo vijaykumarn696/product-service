@@ -2,6 +2,7 @@ package vijay.dev.productservice.services;
 
 import org.springframework.stereotype.Service;
 import vijay.dev.productservice.dtos.GenericProductDto;
+import vijay.dev.productservice.dtos.UUIDsDto;
 import vijay.dev.productservice.models.Category;
 import vijay.dev.productservice.models.Price;
 import vijay.dev.productservice.models.Product;
@@ -174,5 +175,13 @@ public class SelfProductServiceImpl implements ProductService,CategoryService{
     @Override
     public Category updateCategoryUsingPatch(Category category) {
         return categoryRepository.save(category);
+    }
+
+    @Override
+    public List<Category> getCategoriesByIds(UUIDsDto uuids) {
+
+//        return categoryRepository.findAllById(uuids.getUuids());
+        return categoryRepository.findAllById(uuids.getUuids());
+
     }
 }
